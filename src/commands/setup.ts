@@ -21,12 +21,12 @@ export default class Setup extends Command {
     {
       type: 'input',  
       name: 'school',
-      message: `🏫 School name (e.g. "my-school")`,
+      message: `🏫 School name (e.g. "cool school")`,
     },
     {
       type: 'input',
       name: 'username',
-      message: `👤 Username (e.g. "my-username")`,
+      message: `👤 Username (e.g. "cool dude")`,
     },
     {
       type: 'password',
