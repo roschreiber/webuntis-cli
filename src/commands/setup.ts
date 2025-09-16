@@ -1,49 +1,110 @@
 import {Args, Command, Flags} from '@oclif/core'
-import enquirer from 'enquirer';
-const { prompt } = enquirer;
+import enquirer from 'enquirer'
+const {prompt} = enquirer
 import fsExtra from 'fs-extra'
-import * as path from "path";
-import kleur from 'kleur';
+import * as path from 'path'
+import kleur from 'kleur'
+import boxen from 'boxen'
+import {WebUntis} from 'webuntis'
+
+interface SetupConfig {
+  school: string
+  username: string
+  password: string
+  url: string
+}
 
 export default class Setup extends Command {
   static override description = 'setup the connection to the webuntis api'
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ]
-  
-  public async run(): Promise<void> {
-    const configPath = path.join(this.config.configDir, 'config.json');
+  static override examples = ['<%= config.bin %> <%= command.id %>']
 
-    this.log("\n✨ Welcome to " + kleur.italic("Webuntis-CLI!") + "\n");
-    this.log("⚡ First, let's set up your connection to WebUntis:\n");
+  public async run(): Promise<void> {
+    const configPath = path.join(this.config.configDir, 'config.json')
+
+    const wlcMessage = `★ Welcome to ${kleur
+      .bold()
+      .yellow('Webuntis-CLI!')}\n\n⚡First, let's set up your connection to WebUntis:`
+    const successMessage = `✅ ${kleur
+      .bold()
+      .green('Setup Complete!')}\n\n🎉 Everything's configured and ready to go!\n💡 Try running: ${kleur.cyan(
+      'webuntis today',
+    )}`
+    const errorMessage = `❌ ${kleur.bold().red('Setup Failed')}\n`
+
+    this.log(
+      boxen(wlcMessage, {
+        padding: 1,
+        margin: 1,
+        borderStyle: 'round',
+        borderColor: 'cyan',
+      }),
+    )
 
     await prompt([
-    {
-      type: 'input',  
-      name: 'school',
-      message: `🏫 School name (e.g. "cool school")`,
-    },
-    {
-      type: 'input',
-      name: 'username',
-      message: `👤 Username (e.g. "cool dude")`,
-    },
-    {
-      type: 'password',
-      name: 'password',
-      message: `🔑 Password`,
-    },
-    {
-      type: 'input',
-      name: 'URL',
-      message: `🌐 Schools URL (e.g. "https://cool-school.webuntis.com/")`,
-      validate: input => input.startsWith('https://') ? true : 'Please enter a valid URL starting with "https://"!',
-    },
-  ]).then(answer => fsExtra.writeJson(configPath, answer), error => {
-    this.log("❌ Failed to save config: " + error.message);
-  }), this.log("\n✅ Everything's set up now! Have fun! :)");
+      {
+        type: 'input',
+        name: 'school',
+        message: `🏫 School name (e.g. "cool school")`,
+      },
+      {
+        type: 'input',
+        name: 'username',
+        message: `👤 Username (e.g. "cool dude")`,
+      },
+      {
+        type: 'password',
+        name: 'password',
+        message: `🔑 Password`,
+      },
+      {
+        type: 'input',
+        name: 'url',
+        message: `🌐 Schools URL (e.g. "https://cool-school.webuntis.com/")`,
+        validate: (input) =>
+          input.endsWith('.webuntis.com') ? true : 'Please enter a valid URL ending with ".webuntis.com"!',
+      },
+    ]).then(
+      async (answer) => {
+        const config = answer as SetupConfig
+        const untis = new WebUntis(config.school, config.username, config.password, config.url)
+        await untis.login()
+        const validateSession = await untis.validateSession()
 
+        if (!validateSession) {
+          this.log(
+            boxen(errorMessage, {
+              padding: 1,
+              margin: 1,
+              borderStyle: 'single',
+              borderColor: 'red',
+            }),
+          )
 
-    // to get data from congif: const { url, username, password } = await fs.readJSON(configPath);
+          return
+        }
+        fsExtra.writeJson(configPath, config, {spaces: 2})
+
+        this.log(
+          boxen(successMessage, {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'round',
+            borderColor: 'green',
+          }),
+        )
+      },
+      (error) => {
+        this.log(
+          boxen(errorMessage, {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'single',
+            borderColor: 'red',
+          }),
+        )
+      },
+    )
+
+    // to get data from congif: const { url, username, password, school } = await fs.readJSON(configPath);
   }
 }
