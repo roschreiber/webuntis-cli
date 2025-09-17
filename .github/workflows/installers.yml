@@ -33,6 +33,11 @@ jobs:
       run: npm run build
     - name: Install oclif globally
       run: npm install -g oclif
+    - name: Install GNU tar on Windows
+      if: matrix.target == 'win'
+      run: |
+        choco install tar -y
+        tar --version
     - name: Pack for target
       run: oclif pack ${{ matrix.target }} -r .
     - name: Attach artifacts to release
