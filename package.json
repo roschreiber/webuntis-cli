@@ -1,7 +1,7 @@
 {
   "name": "webuntis-cli",
   "description": "A CLI to fetch your webuntis information",
-  "version": "0.0.1a",
+  "version": "0.0.1b",
   "author": "roschreiber",
   "bin": {
     "webuntis": "./bin/run.js"

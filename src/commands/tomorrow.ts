@@ -1,7 +1,7 @@
 import {Args, Command, Flags} from '@oclif/core'
 import fsExtra from 'fs-extra'
 import * as path from "path";
-import {WebUntis} from "webuntis";
+import {WebUntis, WebUntisDay} from "webuntis";
 import boxen from 'boxen';
 import Table from 'tty-table';
 import kleur from 'kleur';
@@ -20,11 +20,12 @@ export default class Today extends Command {
 
     const untis = new WebUntis(school, username, password, url);
     await untis.login();
-    const timetable = await untis.getOwnTimetableForToday();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const timetable = await untis.getOwnTimetableFor(tomorrow);
     this.log(JSON.stringify(timetable, null, 2));
 
-    const todayDate = new Date();
-    const dateString = todayDate.toLocaleDateString('en-Us', {
+    const dateString = tomorrow.toLocaleDateString('en-Us', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -36,7 +37,7 @@ export default class Today extends Command {
       return;
     }
  
-    let header = [
+        let header = [
       {
         value: "time",
         headerColor: "cyan",
@@ -66,7 +67,7 @@ export default class Today extends Command {
         width: 8,
       }
     ]
-
+    
     //somehow, webuntis output is kinda scuffed and messy and doesn't sort lessons by time defaultly -> we need to do that manually...
     const uniqueLessons = timetable.filter((lesson, index, self) => 
       index === self.findIndex(l => 
@@ -100,4 +101,3 @@ export default class Today extends Command {
     this.log(boxen(`📅 ${kleur.bold().blue(dateString)}\n${table.toString()}`, { padding: 1, textAlignment: 'center', margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center' }));
   }
 }
-
