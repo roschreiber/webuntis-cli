@@ -33,7 +33,7 @@ export default class Today extends Command {
     })
 
     if (timetable.length === 0 || !timetable) {
-      this.log(boxen(kleur.bold().yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lessons found for today.')}`), { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center', textAlignment: 'center' }));
+      this.log(boxen(kleur.bold().yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lessons found for tomorrow.')}`), { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center', textAlignment: 'center' }));
       return;
     }
  
@@ -67,7 +67,7 @@ export default class Today extends Command {
         width: 8,
       }
     ]
-    
+  
     //somehow, webuntis output is kinda scuffed and messy and doesn't sort lessons by time defaultly -> we need to do that manually...
     const uniqueLessons = timetable.filter((lesson, index, self) => 
       index === self.findIndex(l => 

@@ -21,22 +21,19 @@ export default class Setup extends Command {
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json')
 
-    const wlcMessage = `★ Welcome to ${kleur
-      .bold()
-      .yellow('Webuntis-CLI!')}\n\n⚡First, let's set up your connection to WebUntis:`
-    const successMessage = `✅ ${kleur
-      .bold()
-      .green('Setup Complete!')}\n\n🎉 Everything's configured and ready to go!\n💡 Try running: ${kleur.cyan(
-      'webuntis today',
-    )}`
-    const errorMessage = `❌ ${kleur.bold().red('Setup Failed')}\n`
-
+    const wlcMessage = `★ Welcome to ${kleur.bold().yellow('Webuntis-CLI!')}\n\n⚡ First, let's set up your connection to WebUntis:`
+    const successMessage = `✅ ${kleur.bold().green('Setup Complete!')}\n\n🎉 Everything's configured and ready to go!\n💡 Try running: ${kleur.cyan('webuntis today')}`
+    const errMessage = `❌ ${kleur.bold().red('Setup Failed')}\n`
+    
     this.log(
       boxen(wlcMessage, {
         padding: 1,
         margin: 1,
         borderStyle: 'round',
-        borderColor: 'cyan',
+        borderColor: 'green',
+        title: `${kleur.bold().yellow('Webuntis-CLI')}`,
+        titleAlignment: 'center',
+        textAlignment: 'center'
       }),
     )
 
@@ -59,9 +56,16 @@ export default class Setup extends Command {
       {
         type: 'input',
         name: 'url',
-        message: `🌐 Schools URL (e.g. "https://cool-school.webuntis.com/")`,
-        validate: (input) =>
-          input.endsWith('.webuntis.com') ? true : 'Please enter a valid URL ending with ".webuntis.com"!',
+        message: `🌐 Schools URL (e.g. "cool-school.webuntis.com/")`,
+        validate: (input) => {
+          if (input.startsWith('https://') || input.startsWith('http://')) {
+            return 'Please don\'t include "https://" at the start of the URL!'
+          }
+          if (!input.endsWith('.webuntis.com')) {
+            return 'Please enter a valid URL ending with ".webuntis.com"!'
+          }
+          return true
+        },
       },
     ]).then(
       async (answer) => {
@@ -72,7 +76,7 @@ export default class Setup extends Command {
 
         if (!validateSession) {
           this.log(
-            boxen(errorMessage, {
+            boxen(errMessage, {
               padding: 1,
               margin: 1,
               borderStyle: 'single',
@@ -95,7 +99,7 @@ export default class Setup extends Command {
       },
       (error) => {
         this.log(
-          boxen(errorMessage, {
+          boxen(errMessage, {
             padding: 1,
             margin: 1,
             borderStyle: 'single',

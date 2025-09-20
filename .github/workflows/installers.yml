@@ -33,12 +33,20 @@ jobs:
       run: npm run build
     - name: Install oclif globally
       run: npm install -g oclif
-    - name: Install GNU tar on Windows
+    - name: Setup MSys2 for Windows
       if: matrix.target == 'win'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        install: tar
+    - name: Pack for target (Windows with MSys2)
+      if: matrix.target == 'win'
+      shell: msys2 {0}
       run: |
-        choco install tar -y
-        tar --version
-    - name: Pack for target
+        export PATH="/mingw64/bin:$PATH"
+        oclif pack win -r .
+    - name: Pack for target (Linux)
+      if: matrix.target == 'deb'
       run: oclif pack ${{ matrix.target }} -r .
     - name: Attach artifacts to release
       uses: svenstaro/upload-release-action@v2
