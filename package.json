@@ -1,7 +1,7 @@
 {
   "name": "webuntis-cli",
   "description": "A CLI to fetch your webuntis information",
-  "version": "0.0.2a",
+  "version": "0.0.2b",
   "author": "roschreiber",
   "bin": {
     "webuntis": "./bin/run.js"
@@ -10,6 +10,7 @@
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
+    "@oclif/plugin-not-found": "^3.2.68",
     "@oclif/plugin-plugins": "^5",
     "boxen": "^8.0.1",
     "enquirer": "^2.4.1",
@@ -58,7 +59,8 @@
     "commands": "./dist/commands",
     "plugins": [
       "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-plugins",
+      "@oclif/plugin-not-found"
     ],
     "topicSeparator": " ",
     "topics": {

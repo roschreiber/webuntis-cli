@@ -6,8 +6,8 @@ import boxen from 'boxen';
 import Table from 'tty-table';
 import kleur from 'kleur';
 
-export default class Next extends Command {
-  static override description = 'gets your next lesson from webuntis'
+export default class Now extends Command {
+  static override description = 'gets your current lesson from webuntis'
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
@@ -36,14 +36,14 @@ export default class Next extends Command {
       )
     ).sort((a, b) => a.startTime - b.startTime);
 
-     const nextLesson = uniqueLessons.find(lesson => {
-      const lessonStart = new Date();
-      lessonStart.setHours(Math.floor(lesson.startTime / 100), lesson.startTime % 100);
-      return lessonStart > todayDate;
+    const currentTime = todayDate.getHours() * 100 + todayDate.getMinutes();
+
+    const currentLesson = uniqueLessons.find(lesson => {
+      return lesson.startTime <= currentTime && lesson.endTime > currentTime;
     });
 
-    if (timetable.length === 0 || !timetable || !nextLesson) {
-      this.log(boxen(kleur.bold().yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 You don\'t have any upcoming lessons.')}`), { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center', textAlignment: 'center' }));
+    if (timetable.length === 0 || !timetable || !currentLesson) {
+      this.log(boxen(kleur.bold().yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lesson happening right now.')}`), { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center', textAlignment: 'center' }));
       return;
     }
 
@@ -53,7 +53,7 @@ export default class Next extends Command {
       // so we get 8:45
       // padStart just adds 0 to single digit hours, so 8 becomes 08
 
-    this.log(boxen(`📅 ${kleur.bold().blue(dateString)}\n\n${kleur.bold().green(`Next subject: ${kleur.bold().yellow(nextLesson.su.map(s => s.longname).join(", "))}`)}`, { padding: 1, textAlignment: 'center', margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center' }));
+    this.log(boxen(`📅 ${kleur.bold().blue(dateString)}\n\n${kleur.bold().green(`Current subject: ${kleur.bold().yellow(currentLesson.su.map(s => s.longname).join(", "))}`)}`, { padding: 1, textAlignment: 'center', margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center' }));
   }
 }
 

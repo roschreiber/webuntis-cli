@@ -43,7 +43,7 @@ export default class Dashboard extends Command {
         boxen(
           kleur
             .bold()
-            .yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lessons found for today.')}`),
+            .yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lessons found for today, dashboard can\'t be shown.')}`),
           {
             padding: 1,
             margin: 1,

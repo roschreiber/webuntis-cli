@@ -16,14 +16,12 @@ export default class Tomorrow extends Command {
     const configPath = path.join(this.config.configDir, 'config.json');
     const config = await fsExtra.readJSON(configPath);
     const { url, username, password, school } = config;
-    this.log(JSON.stringify(config, null, 2));
 
     const untis = new WebUntis(school, username, password, url);
     await untis.login();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const timetable = await untis.getOwnTimetableFor(tomorrow);
-    this.log(JSON.stringify(timetable, null, 2));
 
     const dateString = tomorrow.toLocaleDateString('en-Us', {
       weekday: 'long',

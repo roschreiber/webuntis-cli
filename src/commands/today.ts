@@ -16,12 +16,10 @@ export default class Today extends Command {
     const configPath = path.join(this.config.configDir, 'config.json');
     const config = await fsExtra.readJSON(configPath);
     const { url, username, password, school } = config;
-    this.log(JSON.stringify(config, null, 2));
 
     const untis = new WebUntis(school, username, password, url);
     await untis.login();
     const timetable = await untis.getOwnTimetableForToday();
-    this.log(JSON.stringify(timetable, null, 2));
 
     const todayDate = new Date();
     const dateString = todayDate.toLocaleDateString('en-Us', {
