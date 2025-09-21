@@ -31,6 +31,11 @@ If you want to download webuntis-cli, please head to the Releases tab and downlo
 > We currently do not support mac. 
 > webuntis-cli will soon also be published to npm once it is in a more stable state.
 
+> [!IMPORTANT]
+> You might get a error saying that your PATH is larger than 1024 bytes. This is done by NSIS and I can't fix it myself. If that happens, please add webuntis-cli to PATH manually.
+
+After installing webuntis-cli, try running `webuntis setup`!
+
 ## TO-DO
 
 Below is a quick to-do list with all the features that currently are in the cli, and ones that I plan to add soon.
