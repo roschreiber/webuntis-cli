@@ -30,8 +30,8 @@ jobs:
           path-type: inherit
       - name: Prepend MSYS2 tar to PATH (Windows)
         if: runner.os == 'Windows'
-        run: echo "C:\\msys64\\usr\\bin" >> %GITHUB_PATH%
-        shell: cmd
+        run: echo "C:\\msys64\\usr\\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: pwsh
       - name: Install NSIS (Windows)
         if: runner.os == 'Windows'
         run: choco install nsis -y
