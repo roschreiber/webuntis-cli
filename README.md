@@ -75,3 +75,7 @@ oclif pack [PLATFORM]
 ```
 
 [PLATFORM] being `deb`, `win`, `macos` or `tarballs`.
+
+## Notice
+
+I am not affiliated with Untis GmbH nor with WebUntis API. Use this at your own risk.
