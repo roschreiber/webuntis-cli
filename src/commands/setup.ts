@@ -21,6 +21,8 @@ export default class Setup extends Command {
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json')
 
+    await fsExtra.ensureDir(this.config.configDir)
+
     const wlcMessage = `★ Welcome to ${kleur.bold().yellow('Webuntis-CLI!')}\n\n⚡ First, lets set up your connection to WebUntis:`
     const successMessage = `✅ ${kleur.bold().green('Setup Complete!')}\n\n🎉 Everything's configured and ready to go!\n💡 Try running: ${kleur.cyan('webuntis today')}`
     const errMessage = `❌ ${kleur.bold().red('Setup Failed')}\n`
