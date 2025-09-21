@@ -32,7 +32,7 @@
     "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
     "mocha": "^10",
-    "oclif": "^4",
+    "oclif": "^4.22.24",
     "shx": "^0.3.3",
     "ts-node": "^10",
     "typescript": "^5"

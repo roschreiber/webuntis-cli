@@ -7,8 +7,8 @@ import Table from 'tty-table'
 import kleur from 'kleur'
 import {time} from 'console'
 
-export default class Today extends Command {
-  static override description = 'get information from todays webuntis planner'
+export default class Dashboard extends Command {
+  static override description = 'get an overview of your day and stats about you'
   static override examples = ['<%= config.bin %> <%= command.id %>']
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json')
@@ -18,7 +18,7 @@ export default class Today extends Command {
 
     const untis = new WebUntis(school, username, password, url)
     await untis.login()
-    const timetable = await untis.getOwnTimetableFor(new Date('2025-09-19'))
+    const timetable = await untis.getOwnTimetableForToday()
     this.log(JSON.stringify(timetable, null, 2))
 
     const startDate = new Date('2000-01-01')

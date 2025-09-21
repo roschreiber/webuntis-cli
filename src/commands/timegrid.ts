@@ -7,7 +7,7 @@ import Table from 'tty-table';
 import kleur from 'kleur';
 import { time } from 'console';
 
-export default class Today extends Command {
+export default class Timegrid extends Command {
   static override description = 'show your schools timegrid'
   static override examples = [
     '<%= config.bin %> <%= command.id %>',

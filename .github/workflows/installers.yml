@@ -31,20 +31,15 @@ jobs:
       run: npm ci
     - name: Build project
       run: npm run build
-    - name: Install oclif globally
-      run: npm install -g oclif
-    - name: Setup MSys2 for Windows
+    # Ensure GNU tar is available on Windows runners for oclif
+    - name: Add GNU tar to PATH (Windows)
       if: matrix.target == 'win'
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: MINGW64
-        install: tar
-    - name: Pack for target (Windows with MSys2)
+      run: echo "C:\msys64\usr\bin" >> %GITHUB_PATH%
+      shell: cmd
+    # Use npx so we don't rely on a global oclif in a different shell
+    - name: Pack for target (Windows)
       if: matrix.target == 'win'
-      shell: msys2 {0}
-      run: |
-        export PATH="/mingw64/bin:$PATH"
-        oclif pack win -r .
+      run: npx oclif pack win -r .
     - name: Pack for target (Linux)
       if: matrix.target == 'deb'
       run: oclif pack ${{ matrix.target }} -r .

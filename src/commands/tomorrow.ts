@@ -7,8 +7,8 @@ import Table from 'tty-table';
 import kleur from 'kleur';
 import { time } from 'console';
 
-export default class Today extends Command {
-  static override description = 'get information from todays webuntis planner'
+export default class Tomorrow extends Command {
+  static override description = 'get information from tomorrows webuntis planner'
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
