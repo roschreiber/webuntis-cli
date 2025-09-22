@@ -19,26 +19,15 @@ jobs:
       - name: Pack (deb)
         shell: bash
         run: npx oclif pack deb -r .
-      - name: Pack (win)
-        shell: bash
-        run: npx oclif pack win -r .
       - name: Remove repo metadata
         shell: bash
         run: |
           find ./dist/deb -maxdepth 2 -type f \( -name 'Packages' -o -name 'Packages.*' -o -name 'Release' -o -name 'Release.*' \) -print -delete
-      - name: Attach deb artifacts to release
+      - name: Attach artifacts to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GH_TOKEN }}
           file: './dist/deb/**/*.deb'
-          file_glob: true
-          overwrite: true
-          tag: ${{ github.ref }}
-      - name: Attach win artifacts to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GH_TOKEN }}
-          file: './dist/win32/**/*.exe'
           file_glob: true
           overwrite: true
           tag: ${{ github.ref }}
