@@ -22,7 +22,7 @@ export default class Today extends Command {
     const timetable = await untis.getOwnTimetableForToday();
 
     const todayDate = new Date();
-    const dateString = todayDate.toLocaleDateString('en-Us', {
+    const dateString = todayDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -96,6 +96,8 @@ export default class Today extends Command {
     let table = ANSI.render();
 
     this.log(boxen(`📅 ${kleur.bold().blue(dateString)}\n${table.toString()}`, { padding: 1, textAlignment: 'center', margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center' }));
+
+    await untis.logout();
   }
 }
 

@@ -33,14 +33,14 @@ export default class Absences extends Command {
     const notexcusedcount = abslessons.absences.filter((Absences) => !Absences.isExcused).length
     const excusedcount = abslessons.absences.filter((Absences) => Absences.isExcused).length
 
-    const dateStringStart = startDate.toLocaleDateString('en-Us', {
+    const dateStringStart = startDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     })
 
-    const dateStringEnd = endDate.toLocaleDateString('en-Us', {
+    const dateStringEnd = endDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -131,6 +131,8 @@ export default class Absences extends Command {
           },
         ),
       )
+
+      await untis.logout();
     }
   }
 }

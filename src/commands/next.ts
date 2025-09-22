@@ -21,7 +21,7 @@ export default class Next extends Command {
     const todayDate = new Date();
     const timetable = await untis.getOwnTimetableFor(todayDate);
 
-    const dateString = todayDate.toLocaleDateString('en-Us', {
+    const dateString = todayDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -54,6 +54,8 @@ export default class Next extends Command {
       // padStart just adds 0 to single digit hours, so 8 becomes 08
 
     this.log(boxen(`📅 ${kleur.bold().blue(dateString)}\n\n${kleur.bold().green(`Next subject: ${kleur.bold().yellow(nextLesson.su.map(s => s.longname).join(", "))}`)}`, { padding: 1, textAlignment: 'center', margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center' }));
+    
+    await untis.logout();
   }
 }
 

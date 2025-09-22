@@ -85,7 +85,6 @@ export default class Setup extends Command {
               borderColor: 'red',
             }),
           )
-
           return
         }
         fsExtra.writeJson(configPath, config, {spaces: 2})

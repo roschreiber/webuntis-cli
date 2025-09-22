@@ -16,7 +16,6 @@ export default class Week extends Command {
     const configPath = path.join(this.config.configDir, 'config.json');
     const config = await fsExtra.readJSON(configPath);
     const { url, username, password, school } = config;
-    this.log(JSON.stringify(config, null, 2));
 
     const todayDate = new Date();
 
@@ -41,7 +40,7 @@ export default class Week extends Command {
 
     // Display each day
     for (const day of weekData) {
-      const dateString = day.date.toLocaleDateString('en-Us', {
+      const dateString = day.date.toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -130,5 +129,6 @@ export default class Week extends Command {
         titleAlignment: 'center' 
       }));
     }
+    await untis.logout();
   }
 }

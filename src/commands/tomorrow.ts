@@ -23,7 +23,7 @@ export default class Tomorrow extends Command {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const timetable = await untis.getOwnTimetableFor(tomorrow);
 
-    const dateString = tomorrow.toLocaleDateString('en-Us', {
+    const dateString = tomorrow.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -97,5 +97,7 @@ export default class Tomorrow extends Command {
     let table = ANSI.render();
 
     this.log(boxen(`📅 ${kleur.bold().blue(dateString)}\n${table.toString()}`, { padding: 1, textAlignment: 'center', margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center' }));
+  
+    await untis.logout();
   }
 }

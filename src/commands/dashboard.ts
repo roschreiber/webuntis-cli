@@ -14,12 +14,10 @@ export default class Dashboard extends Command {
     const configPath = path.join(this.config.configDir, 'config.json')
     const config = await fsExtra.readJSON(configPath)
     const {url, username, password, school} = config
-    this.log(JSON.stringify(config, null, 2))
 
     const untis = new WebUntis(school, username, password, url)
     await untis.login()
     const timetable = await untis.getOwnTimetableForToday()
-    this.log(JSON.stringify(timetable, null, 2))
 
     const startDate = new Date('2000-01-01')
     const endDate = new Date()
@@ -31,7 +29,7 @@ export default class Dashboard extends Command {
     const excusedcount = abslessons.absences.filter((Absences) => Absences.isExcused).length
 
     const todayDate = new Date()
-    const dateString = todayDate.toLocaleDateString('en-Us', {
+    const dateString = todayDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -183,5 +181,7 @@ export default class Dashboard extends Command {
 
     this.log(todayBox)
     this.log(aboutYOuBox)
+
+    await untis.logout();
   }
 }
