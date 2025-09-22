@@ -17,16 +17,71 @@ interface SetupConfig {
 export default class Setup extends Command {
   static override description = 'setup the connection to the webuntis api'
   static override examples = ['<%= config.bin %> <%= command.id %>']
+  static override flags = {
+    //flag for reset (-r)
+    reset: Flags.boolean({ char: 'r', description: 'reset the configuration' }),
+    //flag for test (-t)
+    test: Flags.boolean({ char: 't', description: 'test connection to webuntis' }),
+  }
 
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json')
+    const { args, flags } = await this.parse(Setup)
 
     await fsExtra.ensureDir(this.config.configDir)
 
     const wlcMessage = `★ Welcome to ${kleur.bold().yellow('Webuntis-CLI!')}\n\n⚡ First, lets set up your connection to WebUntis:`
     const successMessage = `✅ ${kleur.bold().green('Setup Complete!')}\n\n🎉 Everything's configured and ready to go!\n💡 Try running: ${kleur.cyan('webuntis today')}`
     const errMessage = `❌ ${kleur.bold().red('Setup Failed')}\n`
-    
+
+    if (flags.reset) {
+      await fsExtra.remove(configPath)
+      this.log(
+        boxen(
+          `🔄 ${kleur.bold().yellow('Configuration Reset')}\n\n${kleur.reset().bold('Your configuration has been reset. Please run the setup again.')}`,
+          {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'round',
+            borderColor: 'green',
+          },
+        ),
+      )
+      return
+    } else if (flags.test) {
+      if (!(await fsExtra.pathExists(configPath))) {
+        this.log(
+          boxen(
+            `⚠️  ${kleur.bold().yellow('No Configuration Found')}\n\n${kleur.reset().bold('Please run the setup first using')} ${kleur.cyan('webuntis setup')}`,
+            {
+              padding: 1,
+              margin: 1,
+              borderStyle: 'round',
+              borderColor: 'yellow',
+            },
+          ),
+        )
+        return
+      }
+      const config = await fsExtra.readJSON(configPath)
+      const {url, username, password, school} = config
+
+      const untis = new WebUntis(school, username, password, url)
+      await untis.login()
+      const validateSession = await untis.validateSession()
+
+      if (!validateSession) {
+          this.log(
+            boxen(errMessage, {
+              padding: 1,
+              margin: 1,
+              borderStyle: 'single',
+              borderColor: 'red',
+            }),
+          )
+          return
+        }
+    } else {
     this.log(
       boxen(wlcMessage, {
         padding: 1,
@@ -58,7 +113,7 @@ export default class Setup extends Command {
       {
         type: 'input',
         name: 'url',
-        message: `🌐 Schools URL (e.g. "cool-school.webuntis.com/")`,
+        message: `🌐 Schools URL (e.g. "cool-school.webuntis.com")`,
         validate: (input) => {
           if (input.startsWith('https://') || input.startsWith('http://')) {
             return 'Please don\'t include "https://" at the start of the URL!'
@@ -111,5 +166,6 @@ export default class Setup extends Command {
     )
 
     // to get data from congif: const { url, username, password, school } = await fs.readJSON(configPath);
+    }
   }
 }
