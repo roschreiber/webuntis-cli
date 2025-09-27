@@ -10,6 +10,7 @@ import {time} from 'console'
 export default class Dashboard extends Command {
   static override description = 'get an overview of your day and stats about you'
   static override examples = ['<%= config.bin %> <%= command.id %>']
+  static override aliases = ['db']
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json')
     const config = await fsExtra.readJSON(configPath)

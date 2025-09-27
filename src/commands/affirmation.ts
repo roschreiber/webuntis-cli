@@ -10,6 +10,7 @@ export default class Affirmation extends Command {
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
+  static override aliases = ['af']
 
   public async run(): Promise<void> {
     const url = 'https://api.realinspire.live/v1/quotes/random'

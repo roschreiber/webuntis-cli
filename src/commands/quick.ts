@@ -11,6 +11,7 @@ export default class Quick extends Command {
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
+  static override aliases = ['q']
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json');
     const config = await fsExtra.readJSON(configPath);
@@ -18,7 +19,7 @@ export default class Quick extends Command {
 
     const untis = new WebUntis(school, username, password, url);
     await untis.login();
-    const todayDate = new Date("2025-09-16T09:00:00");
+    const todayDate = new Date();
     const timetable = await untis.getOwnTimetableFor(todayDate);
 
     const dateString = todayDate.toLocaleDateString('en-US', {
@@ -55,7 +56,7 @@ export default class Quick extends Command {
 
     const startTime = `${Math.floor(nextLesson.startTime / 100).toString().padStart(2, '0')}:${(nextLesson.startTime % 100).toString().padStart(2, '0')}`;
     const subject = nextLesson.su.map(s => s.longname).join(", ");
-    const teacher = nextLesson.te.map(t => t.name).join(", ");
+    const teacher = nextLesson.te.map(t => t.longname).join(", ");
     const room = nextLesson.ro.map(r => r.name).join(", ");
 
     this.log(`${kleur.cyan('⏰')} ${kleur.bold(startTime)} ${kleur.green('│')} ${kleur.bold().blue(subject)} ${kleur.gray('in')} ${kleur.yellow(room)} ${kleur.gray('with')} ${kleur.magenta(teacher)}`);

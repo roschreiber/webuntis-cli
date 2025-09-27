@@ -8,6 +8,7 @@ import boxen from 'boxen'
 export default class Absences extends Command {
   static override description = 'get all of the days you were absent'
   static override examples = ['<%= config.bin %> <%= command.id %>']
+  static override aliases = ['ab']
   static override flags = {
     //flag for startdate (-s)
     startdate: Flags.string({ char: 's', description: 'start date in YYYY-MM-DD format' }),
@@ -18,7 +19,7 @@ export default class Absences extends Command {
   }
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Absences)
+    const { flags } = await this.parse(Absences)
     const configPath = path.join(this.config.configDir, 'config.json')
     const config = await fsExtra.readJSON(configPath)
     const { url, username, password, school, schoolyearstartdate } = config

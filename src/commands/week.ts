@@ -12,6 +12,7 @@ export default class Week extends Command {
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
+  static override aliases = ['wk']
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json');
     const config = await fsExtra.readJSON(configPath);
