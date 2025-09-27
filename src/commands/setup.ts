@@ -26,7 +26,7 @@ export default class Setup extends Command {
 
   public async run(): Promise<void> {
     const configPath = path.join(this.config.configDir, 'config.json')
-    const { args, flags } = await this.parse(Setup)
+    const { flags } = await this.parse(Setup)
 
     await fsExtra.ensureDir(this.config.configDir)
 
@@ -53,12 +53,15 @@ export default class Setup extends Command {
         this.log(
           boxen(
             `⚠️  ${kleur.bold().yellow('No Configuration Found')}\n\n${kleur.reset().bold('Please run the setup first using')} ${kleur.cyan('webuntis setup')}`,
-            {
-              padding: 1,
-              margin: 1,
-              borderStyle: 'round',
-              borderColor: 'yellow',
-            },
+              {
+                padding: 1,
+                margin: 1,
+                borderStyle: 'round',
+                borderColor: 'green',
+                title: `${kleur.bold().yellow('Webuntis-CLI')}`,
+                titleAlignment: 'center',
+                textAlignment: 'center'
+              }
           ),
         )
         return
@@ -80,6 +83,21 @@ export default class Setup extends Command {
             }),
           )
           return
+        } else {
+          this.log(
+            boxen(
+              `✅ ${kleur.bold().green('Connection Successful!')}\n\n🎉 Successfully connected to WebUntis as ${kleur.bold().cyan(username)} at ${kleur.bold().cyan(school)}`,
+              {
+                padding: 1,
+                margin: 1,
+                borderStyle: 'round',
+                borderColor: 'green',
+                title: `${kleur.bold().yellow('Webuntis-CLI')}`,
+                titleAlignment: 'center',
+                textAlignment: 'center'
+              }
+            ),
+          )
         }
     } else {
     this.log(
@@ -122,8 +140,20 @@ export default class Setup extends Command {
             return 'Please enter a valid URL ending with ".webuntis.com"!'
           }
           return true
-        },
+        }
       },
+      {
+        type: 'input',
+        name: 'schoolyearstartdate',
+        message: `📅 Schoolyear start date (e.g. "09-19" -> 19th of September)`,
+        validate: (input) => {
+          const regex = /^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+            if (!regex.test(input)) {
+              return 'Please enter a valid date in the format "MM-DD"!'
+            }
+            return true
+          }
+      }
     ]).then(
       async (answer) => {
         const config = answer as SetupConfig

@@ -21,11 +21,15 @@ export default class Absences extends Command {
     const { args, flags } = await this.parse(Absences)
     const configPath = path.join(this.config.configDir, 'config.json')
     const config = await fsExtra.readJSON(configPath)
-    const { url, username, password, school } = config
+    const { url, username, password, school, schoolyearstartdate } = config
 
     const untis = new WebUntis(school, username, password, url)
     await untis.login()
-    const startDate = flags.startdate ? new Date(flags.startdate) : new Date('2000-01-01')
+    //schoolyearstartdate in config.json is in MM-DD format
+    //so to get the full date we need to add the current year
+    const currentYear = new Date().getFullYear()
+    const [month, day] = schoolyearstartdate.split('-')
+    const startDate = new Date(`${currentYear}-${month}-${day}`)
     const endDate = flags.enddate ? new Date(flags.enddate) : new Date()
     const abslessons = await untis.getAbsentLesson(startDate, endDate)
 

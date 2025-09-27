@@ -45,11 +45,12 @@ Below is a quick to-do list with all the features that currently are in the cli,
     - [ ] View your timetable for a specific day
 - [x] View your absences
     - [x] Filter your absent days through a start aswell as a enddate
-    - [ ] View an exact list of all your absent days 
+    - [ ] View an exact list of all your absent days, teacher that marked you as absent, lessons that you were absent in...
 - [x] Basic Dashboard
     - [ ] Make the dashboard more 'about-you', include more information and not just 'basic' stuff like your current timetable (?)
 - [ ] Teacher / Subject specific Commands 
-
+- [ ] Theming maybe?
+  
 ## Building
 
 ### Prerequisites
