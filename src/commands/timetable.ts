@@ -36,7 +36,6 @@ export default class Timetable extends Command {
     await untis.login();
     const timetable = await untis.getOwnTimetableFor(new Date(date));
 
-    const todayDate = new Date();
     const dateString = new Date(date).toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -45,7 +44,7 @@ export default class Timetable extends Command {
     })
 
     if (timetable.length === 0 || !timetable) {
-      this.log(boxen(kleur.bold().yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lessons found for today.')}`), { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center', textAlignment: 'center' }));
+      this.log(boxen(kleur.bold().yellow(`📅 ${kleur.bold().blue(dateString)}\n\n ${kleur.bold().red('👀 No lessons found for this date.')}`), { padding: 1, margin: 1, borderStyle: 'round', borderColor: 'green', title: `🏫 ${kleur.bold().green(school)}`, titleAlignment: 'center', textAlignment: 'center' }));
       return;
     }
  
